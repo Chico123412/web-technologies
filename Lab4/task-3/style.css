@@ -1,0 +1,28 @@
+a {
+    color: purple;
+}
+
+.general-link {
+    color: green;
+}
+
+.list-marked-square {
+    list-style-type: square;
+}
+
+.list-marked-image {
+    list-style-image: url(li.svg);
+    list-style-position: inside;
+}
+
+ul ul {
+    list-style-type: none;
+}
+
+.square-marker > a {
+    text-decoration: none;
+}
+
+ol {
+    list-style-position: inside;
+}
