@@ -40,12 +40,13 @@ function runTasks() {
     let person1 = {name: "Ivan", age: 20}
     let person2 = {name: "Ivan", age: 20}
 
+
     console.log(compareObjects(person1, person2))
 
 
     console.log("===== Завдання 2. Логічні оператори =====")
 
-// 2.1 Перевірка діапазону
+// 2.1 Перевірка діапазон
 
     function inRange(num, min, max) {
 
@@ -122,3 +123,17 @@ function runTasks() {
     console.log("Сезон:", getSeason(4))
 
 }
+
+
+// 3.3 ?
+function getSeason2(month) {
+
+    return (month == 12 || month == 1 || month == 2) ? "Зима" :
+        (month >= 3 && month <= 5) ? "Весна" :
+            (month >= 6 && month <= 8) ? "Літо" :
+                (month >= 9 && month <= 11) ? "Осінь" :
+                    "Невірний місяць"
+
+}
+
+console.log("Сезон:", getSeason2(4))
