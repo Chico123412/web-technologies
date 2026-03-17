@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Web technologies practice</title>
+    <link rel="stylesheet" href="../styles/lab5_3.css">
+</head>
+<body>
+<header>
+    <h1>Форма користувача</h1>
+</header>
+
+<main>
+    <div clas="div-form">
+        <form action="questionnaire.html" method="get" enctype="multipart/form-data">
+
+            <div>
+                <label for="name">Ваше ім’я:</label>
+                <input id="name" type="text" name="name" required placeholder="Введіть ім’я">
+            </div>
+
+            <div>
+                <label for="email">Email:</label>
+                <input id="email" type="email" name="email" required placeholder="example@gmail.com">
+            </div>
+
+            <div>
+                <label for="pass">Пароль:</label>
+                <input id="pass" type="password" name="password"
+                       placeholder="мін. 6 символів" required
+                       pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{6,}$"
+                       title="Мінімум 6 символів, 1 велика, 1 мала літера, 1 цифра">
+            </div>
+
+            <div>
+                <label for="birth">Дата народження:</label>
+                <input id="birth" type="date" name="birth">
+            </div>
+
+            <div>
+                <label for="tel">Телефон:</label>
+                <input id="tel" type="tel" name="tel" placeholder="+380XXXXXXXXX"
+                       pattern="^\+380\d{9}$" title="+380XXXXXXXXX">
+            </div>
+
+            <div>
+                <label for="message">Побажання:</label>
+                <textarea id="message" name="message" rows="4" placeholder="Ваші коментарі..."></textarea>
+            </div>
+
+            <fieldset>
+                <legend>Мова спілкування:</legend>
+                <label><input type="radio" name="lan" checked> Українська</label>
+                <label><input type="radio" name="lan"> Англійська</label>
+                <label><input type="radio" name="lan"> Іспанська</label>
+            </fieldset>
+
+            <fieldset>
+                <legend>Ваша стать:</legend>
+                <label><input type="radio" name="gen" checked> Чоловіча</label>
+                <label><input type="radio" name="gen"> Жіноча</label>
+                <label><input type="radio" name="gen"> Інше</label>
+            </fieldset>
+
+            <div>
+                <label for="hobby">Улюблене заняття:</label>
+                <select id="hobby" name="hobby">
+                    <option value="walk">Гуляти</option>
+                    <option value="games">Грати в ігри</option>
+                    <option value="horsing" selected>Хобіхорсінг</option>
+                    <option value="learn">Вчитися</option>
+                    <option value="code">Кодити</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="car">Авто (datalist):</label>
+                <input list="cars" id="car" name="car" placeholder="Виберіть варіант...">
+                <datalist id="cars">
+                    <option value="Volvo">
+                    <option value="Tesla">
+                    <option value="Audi">
+                    <option value="BYD">
+                    <option value="BMW">
+                </datalist>
+            </div>
+
+            <fieldset>
+                <legend>Файли</legend>
+                <div>
+                    <label for="audio">Завантажте аудіо файли:</label>
+                    <input type="file" id="audio" name="audio" accept="audio/*" multiple>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Підтвердження:</legend>
+                <label><input type="checkbox" required> Погоджуюсь з ліцензійною угодою</label>
+                <label><input type="checkbox"> Мені є понад 13 років</label>
+                <label><input type="checkbox"> Ознайомлений з правилами безпеки</label>
+                <label><input type="checkbox"> Отримувати розсилку на email</label>
+            </fieldset>
+
+            <div>
+                <input type="submit" value="Надіслати">
+                <input type="reset" value="Очистити">
+            </div>
+        </form>
+    </div>
+</main>
+
+<footer>
+</footer>
+</body>
+</html>
