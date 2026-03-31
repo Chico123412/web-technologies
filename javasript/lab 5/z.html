@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лабораторна робота №5 JavaScript</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f4f6f9;
+            color: #222;
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+        }
+
+        .section {
+            background: white;
+            padding: 20px;
+            margin: 20px auto;
+            border-radius: 12px;
+            max-width: 1000px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        button, input, select {
+            padding: 10px 12px;
+            margin: 5px;
+            border-radius: 8px;
+            border: 1px solid #bbb;
+            font-size: 15px;
+        }
+
+        button {
+            cursor: pointer;
+            background: #2d89ef;
+            color: white;
+            border: none;
+        }
+
+        button:hover {
+            background: #1b6fc9;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        /* Лампочка */
+        .lamp-container {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .lamp {
+            width: 100px;
+            height: 140px;
+            margin: 0 auto;
+            border-radius: 50% 50% 40% 40%;
+            background: #777;
+            position: relative;
+            transition: 0.3s;
+            border: 3px solid #444;
+        }
+
+        .lamp::after {
+            content: "";
+            width: 35px;
+            height: 35px;
+            background: #444;
+            position: absolute;
+            bottom: -28px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 4px;
+        }
+
+        .on {
+            background: yellow;
+            box-shadow: 0 0 40px yellow;
+        }
+
+        .energy-saving.on {
+            background: #ccff66;
+            box-shadow: 0 0 40px #ccff66;
+        }
+
+        .led.on {
+            background: #9be7ff;
+            box-shadow: 0 0 40px #9be7ff;
+        }
+
+        /* Світлофор */
+        .traffic-light {
+            width: 100px;
+            background: #222;
+            padding: 15px;
+            border-radius: 15px;
+            margin: 20px auto;
+        }
+
+        .light {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #555;
+            margin: 10px auto;
+            transition: 0.3s;
+        }
+
+        .red.active {
+            background: red;
+            box-shadow: 0 0 20px red;
+        }
+
+        .yellow.active {
+            background: yellow;
+            box-shadow: 0 0 20px yellow;
+        }
+
+        .green.active {
+            background: limegreen;
+            box-shadow: 0 0 20px limegreen;
+        }
+
+        /* Годинник */
+        #clock {
+            font-size: 38px;
+            text-align: center;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+
+        /* Календар */
+        .calendar {
+            text-align: center;
+        }
+
+        #calendarTable {
+            margin: 15px auto;
+            border-collapse: collapse;
+        }
+
+        #calendarTable td, #calendarTable th {
+            border: 1px solid #aaa;
+            padding: 10px;
+            width: 45px;
+            height: 45px;
+            text-align: center;
+        }
+
+        #calendarTable th {
+            background: #e9ecef;
+        }
+
+        .today {
+            background: #2d89ef;
+            color: white;
+            border-radius: 6px;
+        }
+
+        /* Каталог */
+        .product-list, .order-list {
+            margin-top: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .small-text {
+            color: #555;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Лабораторна робота №5</h1>
+<h2>Дата і час. Планування: setTimeout та setInterval. Map, Set, WeakMap, WeakSet</h2>
+
+<!-- Завдання 1 -->
+<div class="section">
+    <h2>Завдання 1 — Робота з className та classList</h2>
+
+    <div class="center">
+        <label for="lampType">Оберіть тип лампочки:</label>
+        <select id="lampType">
+            <option value="normal">Звичайна</option>
+            <option value="energy-saving">Енергозберігаюча</option>
+            <option value="led">Світлодіодна</option>
+        </select>
+
+        <button onclick="turnOnLamp()">Включити</button>
+        <button onclick="turnOffLamp()">Виключити</button>
+        <button onclick="changeBrightness()">Змінити яскравість</button>
+    </div>
+
+    <div class="lamp-container">
+        <div id="lamp" class="lamp"></div>
+        <p id="lampStatus">Стан: вимкнена</p>
+        <p id="lampBrightness" class="small-text">Яскравість: 100%</p>
+    </div>
+</div>
+
+<!-- Завдання 2 -->
+<div class="section">
+    <h2>Завдання 2 — setTimeout та setInterval</h2>
+
+    <div class="center">
+        <button onclick="startTrafficLight()">Старт</button>
+        <button onclick="stopTrafficLight()">Стоп</button>
+        <button onclick="manualNextState()">Наступний стан вручну</button>
+        <button onclick="changeTrafficTimes()">Змінити тривалість</button>
+    </div>
+
+    <div class="traffic-light">
+        <div id="redLight" class="light red"></div>
+        <div id="yellowLight" class="light yellow"></div>
+        <div id="greenLight" class="light green"></div>
+    </div>
+
+    <p id="trafficStatus" class="center">Поточний стан: зупинено</p>
+</div>
+
+<!-- Завдання 3 -->
+<div class="section">
+    <h2>Завдання 3 — Дата та час</h2>
+
+    <h3>1. Цифровий годинник</h3>
+    <div id="clock">00:00:00</div>
+
+    <h3>2. Таймер зворотного відліку</h3>
+    <div class="center">
+        <input type="datetime-local" id="countdownInput">
+        <button onclick="startCountdown()">Запустити таймер</button>
+    </div>
+    <p id="countdownResult" class="center">Тут буде залишковий час</p>
+
+    <h3>3. Календар</h3>
+    <div class="calendar">
+        <input type="number" id="calendarMonth" placeholder="Місяць (1-12)" min="1" max="12">
+        <input type="number" id="calendarYear" placeholder="Рік" min="1900" max="2100">
+        <button onclick="generateCalendar()">Показати календар</button>
+        <table id="calendarTable"></table>
+    </div>
+
+    <h3>4. Через скільки часу настане день народження</h3>
+    <div class="center">
+        <input type="date" id="birthdayInput">
+        <button onclick="calculateBirthday()">Порахувати</button>
+    </div>
+    <p id="birthdayResult" class="center">Тут буде результат</p>
+</div>
+
+<!-- Завдання 4 -->
+<div class="section">
+    <h2>Завдання 4 — Map, Set, WeakMap, WeakSet</h2>
+
+    <div class="center">
+        <input type="text" id="productName" placeholder="Назва продукту">
+        <input type="number" id="productPrice" placeholder="Ціна">
+        <input type="number" id="productQuantity" placeholder="Кількість">
+        <button onclick="addProduct()">Додати продукт</button>
+    </div>
+
+    <div class="center">
+        <input type="number" id="deleteId" placeholder="ID продукту для видалення">
+        <button onclick="deleteProduct()">Видалити продукт</button>
+    </div>
+
+    <div class="center">
+        <input type="number" id="updateId" placeholder="ID продукту для оновлення">
+        <input type="number" id="newPrice" placeholder="Нова ціна">
+        <input type="number" id="newQuantity" placeholder="Нова кількість">
+        <button onclick="updateProduct()">Оновити продукт</button>
+    </div>
+
+    <div class="center">
+        <input type="text" id="searchName" placeholder="Назва для пошуку">
+        <button onclick="searchProduct()">Знайти продукт</button>
+    </div>
+
+    <div class="center">
+        <input type="number" id="orderId" placeholder="ID продукту для замовлення">
+        <input type="number" id="orderQty" placeholder="Кількість замовлення">
+        <button onclick="makeOrder()">Оформити замовлення</button>
+    </div>
+
+    <div class="product-list">
+        <h3>Каталог продуктів</h3>
+        <div id="productList">Список порожній</div>
+    </div>
+
+    <div class="order-list">
+        <h3>Замовлення</h3>
+        <div id="orderList">Замовлень ще немає</div>
+    </div>
+
+    <p id="searchResult" class="center"></p>
+</div>
+
+<script>
+    // =========================
+    // Завдання 1 — Лампочка
+    // =========================
+    const lamp = document.getElementById("lamp")
+    const lampType = document.getElementById("lampType")
+    const lampStatus = document.getElementById("lampStatus")
+    const lampBrightnessText = document.getElementById("lampBrightness")
+
+    let lampOn = false
+    let lampBrightness = 100
+    let inactivityTimer
+
+    function applyLampType() {
+        lamp.className = "lamp"
+
+        if (lampType.value === "energy-saving") {
+            lamp.classList.add("energy-saving")
+        } else if (lampType.value === "led") {
+            lamp.classList.add("led")
+        }
+
+        if (lampOn) {
+            lamp.classList.add("on")
+        }
+    }
+
+    lampType.addEventListener("change", () => {
+        applyLampType()
+        resetInactivityTimer()
+    })
+
+    function turnOnLamp() {
+        lampOn = true
+        applyLampType()
+        lamp.classList.add("on")
+        lamp.style.opacity = lampBrightness / 100
+        lampStatus.textContent = "Стан: увімкнена"
+        resetInactivityTimer()
+    }
+
+    function turnOffLamp() {
+        lampOn = false
+        lamp.classList.remove("on")
+        lamp.style.opacity = "1"
+        lampStatus.textContent = "Стан: вимкнена"
+        clearTimeout(inactivityTimer)
+    }
+
+    function changeBrightness() {
+        if (!lampOn) {
+            alert("Спочатку увімкніть лампочку.")
+            return
+        }
+
+        let value = prompt("Введіть яскравість від 0 до 100:")
+        value = Number(value)
+
+        if (isNaN(value) || value < 0 || value > 100) {
+            alert("Некоректне значення.")
+            return
+        }
+
+        lampBrightness = value
+        lamp.style.opacity = lampBrightness / 100
+        lampBrightnessText.textContent = `Яскравість: ${lampBrightness}%`
+        resetInactivityTimer()
+    }
+
+    function resetInactivityTimer() {
+        clearTimeout(inactivityTimer)
+        inactivityTimer = setTimeout(() => {
+            alert("Лампочка автоматично вимкнулась через бездіяльність.")
+            turnOffLamp()
+        }, 300000) // 5 хвилин
+    }
+
+    applyLampType()
+
+    // =========================
+    // Завдання 2 — Світлофор
+    // =========================
+    const redLight = document.getElementById("redLight")
+    const yellowLight = document.getElementById("yellowLight")
+    const greenLight = document.getElementById("greenLight")
+    const trafficStatus = document.getElementById("trafficStatus")
+
+    let redTime = 5000
+    let yellowTime = 3000
+    let greenTime = 7000
+
+    let trafficTimer = null
+    let currentStateIndex = 0
+    const states = ["red", "yellow", "green", "blinking-yellow"]
+
+    function setActiveLight(color) {
+        redLight.classList.remove("active")
+        yellowLight.classList.remove("active")
+        greenLight.classList.remove("active")
+
+        if (color === "red") {
+            redLight.classList.add("active")
+            trafficStatus.textContent = "Поточний стан: червоний"
+        } else if (color === "yellow") {
+            yellowLight.classList.add("active")
+            trafficStatus.textContent = "Поточний стан: жовтий"
+        } else if (color === "green") {
+            greenLight.classList.add("active")
+            trafficStatus.textContent = "Поточний стан: зелений"
+        }
+    }
+
+    function runTrafficCycle() {
+        const state = states[currentStateIndex]
+
+        if (state === "red") {
+            setActiveLight("red")
+            trafficTimer = setTimeout(() => {
+                currentStateIndex = 1
+                runTrafficCycle()
+            }, redTime)
+        } else if (state === "yellow") {
+            setActiveLight("yellow")
+            trafficTimer = setTimeout(() => {
+                currentStateIndex = 2
+                runTrafficCycle()
+            }, yellowTime)
+        } else if (state === "green") {
+            setActiveLight("green")
+            trafficTimer = setTimeout(() => {
+                currentStateIndex = 3
+                runTrafficCycle()
+            }, greenTime)
+        } else if (state === "blinking-yellow") {
+            blinkYellow(0)
+        }
+    }
+
+    function blinkYellow(count) {
+        redLight.classList.remove("active")
+        greenLight.classList.remove("active")
+
+        if (count >= 6) {
+            yellowLight.classList.remove("active")
+            currentStateIndex = 0
+            runTrafficCycle()
+            return
+        }
+
+        yellowLight.classList.toggle("active")
+        trafficStatus.textContent = "Поточний стан: миготливий жовтий"
+
+        trafficTimer = setTimeout(() => {
+            blinkYellow(count + 1)
+        }, 500)
+    }
+
+    function startTrafficLight() {
+        stopTrafficLight()
+        currentStateIndex = 0
+        runTrafficCycle()
+    }
+
+    function stopTrafficLight() {
+        clearTimeout(trafficTimer)
+        redLight.classList.remove("active")
+        yellowLight.classList.remove("active")
+        greenLight.classList.remove("active")
+        trafficStatus.textContent = "Поточний стан: зупинено"
+    }
+
+    function manualNextState() {
+        clearTimeout(trafficTimer)
+        currentStateIndex = (currentStateIndex + 1) % states.length
+        runTrafficCycle()
+    }
+
+    function changeTrafficTimes() {
+        let r = Number(prompt("Введіть тривалість червоного світла (сек):", redTime / 1000))
+        let y = Number(prompt("Введіть тривалість жовтого світла (сек):", yellowTime / 1000))
+        let g = Number(prompt("Введіть тривалість зеленого світла (сек):", greenTime / 1000))
+
+        if (r > 0) redTime = r * 1000
+        if (y > 0) yellowTime = y * 1000
+        if (g > 0) greenTime = g * 1000
+
+        alert("Тривалість оновлено.")
+    }
+
+    // =========================
+    // Завдання 3 — Дата та час
+    // =========================
+    const clock = document.getElementById("clock")
+    let showColon = true
+
+    function updateClock() {
+        const now = new Date()
+
+        let hours = String(now.getHours()).padStart(2, "0")
+        let minutes = String(now.getMinutes()).padStart(2, "0")
+        let seconds = String(now.getSeconds()).padStart(2, "0")
+
+        if (showColon) {
+            clock.textContent = `${hours}:${minutes}:${seconds}`
+        } else {
+            clock.textContent = `${hours} ${minutes} ${seconds}`
+        }
+
+        showColon = !showColon
+    }
+
+    setInterval(updateClock, 1000)
+    updateClock()
+
+    let countdownInterval
+
+    function startCountdown() {
+        clearInterval(countdownInterval)
+
+        const inputValue = document.getElementById("countdownInput").value
+        const result = document.getElementById("countdownResult")
+
+        if (!inputValue) {
+            result.textContent = "Будь ласка, виберіть дату і час."
+            return
+        }
+
+        const targetDate = new Date(inputValue)
+
+        countdownInterval = setInterval(() => {
+            const now = new Date()
+            const diff = targetDate - now
+
+            if (diff <= 0) {
+                clearInterval(countdownInterval)
+                result.textContent = "Час вийшов!"
+                return
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24)
+            const minutes = Math.floor((diff / (1000 * 60)) % 60)
+            const seconds = Math.floor((diff / 1000) % 60)
+
+            result.textContent =
+                `Залишилось: ${days} дн. ${hours} год. ${minutes} хв. ${seconds} сек.`
+        }, 1000)
+    }
+
+    function generateCalendar() {
+        const month = Number(document.getElementById("calendarMonth").value)
+        const year = Number(document.getElementById("calendarYear").value)
+        const table = document.getElementById("calendarTable")
+
+        if (!month || !year) {
+            alert("Введіть місяць і рік.")
+            return
+        }
+
+        if (month < 1 || month > 12) {
+            alert("Місяць має бути від 1 до 12.")
+            return
+        }
+
+        const firstDay = new Date(year, month - 1, 1)
+        const daysInMonth = new Date(year, month, 0).getDate()
+
+        let startDay = firstDay.getDay()
+        if (startDay === 0) {
+            startDay = 7
+        }
+
+        let html = `
+        <tr>
+            <th>Пн</th>
+            <th>Вт</th>
+            <th>Ср</th>
+            <th>Чт</th>
+            <th>Пт</th>
+            <th>Сб</th>
+            <th>Нд</th>
+        </tr>
+    `
+
+        let day = 1
+        const today = new Date()
+
+        for (let i = 0; i < 6; i++) {
+            html += "<tr>"
+
+            for (let j = 1; j <= 7; j++) {
+                if ((i === 0 && j < startDay) || day > daysInMonth) {
+                    html += "<td></td>"
+                } else {
+                    let className = ""
+
+                    if (
+                        day === today.getDate() &&
+                        month - 1 === today.getMonth() &&
+                        year === today.getFullYear()
+                    ) {
+                        className = "today"
+                    }
+
+                    html += `<td class="${className}">${day}</td>`
+                    day++
+                }
+            }
+
+            html += "</tr>"
+        }
+
+        table.innerHTML = html
+    }
+
+
+    function calculateBirthday() {
+        const birthdayValue = document.getElementById("birthdayInput").value
+        const result = document.getElementById("birthdayResult")
+
+        if (!birthdayValue) {
+            result.textContent = "Будь ласка, виберіть дату народження."
+            return
+        }
+
+        const now = new Date()
+        const birthDate = new Date(birthdayValue)
+
+        let nextBirthday = new Date(
+            now.getFullYear(),
+            birthDate.getMonth(),
+            birthDate.getDate(),
+            0, 0, 0,
+        )
+
+        if (nextBirthday <= now) {
+            nextBirthday.setFullYear(now.getFullYear() + 1)
+        }
+
+        const diff = nextBirthday - now
+
+        const totalSeconds = Math.floor(diff / 1000)
+        const seconds = totalSeconds % 60
+
+        const totalMinutes = Math.floor(totalSeconds / 60)
+        const minutes = totalMinutes % 60
+
+        const totalHours = Math.floor(totalMinutes / 60)
+        const hours = totalHours % 24
+
+        const totalDays = Math.floor(totalHours / 24)
+        const months = Math.floor(totalDays / 30)
+        const days = totalDays % 30
+
+        result.textContent =
+            `До дня народження залишилось приблизно: ${months} міс. ${days} дн. ${hours} год. ${minutes} хв. ${seconds} сек.`
+    }
+
+    // =========================
+    // Завдання 4 — Map, Set, WeakMap, WeakSet
+    // =========================
+    let nextProductId = 1
+    const products = new Map()
+    const orders = new Set()
+    const productHistory = new WeakMap()
+    const specialProducts = new WeakSet()
+
+    function renderProducts() {
+        const productList = document.getElementById("productList")
+
+        if (products.size === 0) {
+            productList.innerHTML = "Список порожній"
+            return
+        }
+
+        let html = ""
+        for (const [id, product] of products) {
+            html += `
+                <p>
+                    <strong>ID:</strong> ${id},
+                    <strong>Назва:</strong> ${product.name},
+                    <strong>Ціна:</strong> ${product.price},
+                    <strong>Кількість:</strong> ${product.quantity}
+                </p>
+            `
+        }
+
+        productList.innerHTML = html
+    }
+
+    function renderOrders() {
+        const orderList = document.getElementById("orderList")
+
+        if (orders.size === 0) {
+            orderList.innerHTML = "Замовлень ще немає"
+            return
+        }
+
+        let html = ""
+        let index = 1
+
+        orders.forEach(order => {
+            html += `<p>Замовлення ${index}: продукт ID ${order.productId}, кількість ${order.quantity}, дата ${order.date}</p>`
+            index++
+        })
+
+        orderList.innerHTML = html
+    }
+
+    function addProduct() {
+        const name = document.getElementById("productName").value.trim()
+        const price = Number(document.getElementById("productPrice").value)
+        const quantity = Number(document.getElementById("productQuantity").value)
+
+        if (!name || price <= 0 || quantity < 0) {
+            alert("Введіть коректні дані.")
+            return
+        }
+
+        const product = {name, price, quantity}
+        products.set(nextProductId, product)
+        productHistory.set(product, [`Продукт створено: ${new Date().toLocaleString()}`])
+
+        if (price > 1000) {
+            specialProducts.add(product)
+        }
+
+        nextProductId++
+
+        document.getElementById("productName").value = ""
+        document.getElementById("productPrice").value = ""
+        document.getElementById("productQuantity").value = ""
+
+        renderProducts()
+    }
+
+    function deleteProduct() {
+        const id = Number(document.getElementById("deleteId").value)
+
+        if (products.has(id)) {
+            products.delete(id)
+            alert("Продукт видалено.")
+            renderProducts()
+        } else {
+            alert("Продукт не знайдено.")
+        }
+    }
+
+    function updateProduct() {
+        const id = Number(document.getElementById("updateId").value)
+        const newPrice = Number(document.getElementById("newPrice").value)
+        const newQuantity = Number(document.getElementById("newQuantity").value)
+
+        if (!products.has(id)) {
+            alert("Продукт не знайдено.")
+            return
+        }
+
+        const product = products.get(id)
+
+        if (newPrice > 0) {
+            product.price = newPrice
+        }
+
+        if (newQuantity >= 0) {
+            product.quantity = newQuantity
+        }
+
+        const history = productHistory.get(product) || []
+        history.push(`Оновлено: ${new Date().toLocaleString()}`)
+        productHistory.set(product, history)
+
+        if (product.price > 1000) {
+            specialProducts.add(product)
+        }
+
+        alert("Інформацію оновлено.")
+        renderProducts()
+    }
+
+    function searchProduct() {
+        const searchName = document.getElementById("searchName").value.trim().toLowerCase()
+        const result = document.getElementById("searchResult")
+
+        for (const [id, product] of products) {
+            if (product.name.toLowerCase() === searchName) {
+                const isSpecial = specialProducts.has(product) ? "Так" : "Ні"
+                result.textContent =
+                    `Знайдено: ID ${id}, назва ${product.name}, ціна ${product.price}, кількість ${product.quantity}, дорогий товар: ${isSpecial}`
+                return
+            }
+        }
+
+        result.textContent = "Продукт не знайдено."
+    }
+
+    function makeOrder() {
+        const id = Number(document.getElementById("orderId").value)
+        const quantity = Number(document.getElementById("orderQty").value)
+
+        if (!products.has(id)) {
+            alert("Продукт не знайдено.")
+            return
+        }
+
+        const product = products.get(id)
+
+        if (quantity <= 0) {
+            alert("Некоректна кількість.")
+            return
+        }
+
+        if (product.quantity < quantity) {
+            alert("Недостатньо товару на складі.")
+            return
+        }
+
+        product.quantity -= quantity
+
+        const order = {
+            productId: id,
+            quantity: quantity,
+            date: new Date().toLocaleString(),
+        }
+
+        orders.add(order)
+
+        const history = productHistory.get(product) || []
+        history.push(`Замовлення: -${quantity} шт. (${new Date().toLocaleString()})`)
+        productHistory.set(product, history)
+
+        alert("Замовлення оформлено.")
+        renderProducts()
+        renderOrders()
+    }
+
+    renderProducts()
+    renderOrders()
+</script>
+
+</body>
+</html>
