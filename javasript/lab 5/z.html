@@ -517,6 +517,8 @@
 
     let countdownInterval
 
+
+    // Таймер зворотного відліку
     function startCountdown() {
         clearInterval(countdownInterval)
 
@@ -549,6 +551,7 @@
                 `Залишилось: ${days} дн. ${hours} год. ${minutes} хв. ${seconds} сек.`
         }, 1000)
     }
+
 
     function generateCalendar() {
         const month = Number(document.getElementById("calendarMonth").value)

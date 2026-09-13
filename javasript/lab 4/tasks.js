@@ -91,7 +91,7 @@ function task4() {
 
     students = students.filter(student => student.name !== "Олексій")
     console.log("2. Після видалення студента 'Олексій':", students)
-
+    
     students.push({name: "Тарас", age: 23, course: 2})
     console.log("3. Після додавання нового студента:", students)
 
